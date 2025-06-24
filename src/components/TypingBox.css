@@ -2,13 +2,17 @@
 
 .typing-container {
   width: 70%;              /* occupy 70% of the viewport width */
-  margin: 3rem 15%;        /* top/bottom 3rem, left/right 15% */
-  padding: 2rem 3rem;
+ margin: 3rem 15%;      /* top/bottom 3rem, left/right 15% */
+ display: flex;
+ justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  padding: 2rem 2rem;
   background-color: #323437;
   border-radius: 8px;
   box-shadow: 0 0 15px #1e1e1e;
   color: white;
-  font-family: "Fira Code", monospace;
+  font-family:   "Fira Code", monospace;
   user-select: none;
   box-sizing: border-box;  /* ensure padding included in width */
 }
@@ -20,7 +24,7 @@
   gap: 8px;
   font-size: 1.8rem;
   line-height: 2rem;
-  margin: 0 auto 2rem auto;  /* centers horizontally with auto left/right */
+  margin:  auto auto;  /* centers horizontally with auto left/right */
   width: 70%;                /* occupies 70% of the container/viewport */
   justify-content: center;   /* centers words inside the flex container */
 }
