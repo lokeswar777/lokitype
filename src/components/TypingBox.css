@@ -1,8 +1,8 @@
 /* src/components/TypingBox.css */
 
 .typing-container {
-  max-width: 700px;
-  margin: 3rem auto;
+  width: 70%;              /* occupy 70% of the viewport width */
+  margin: 3rem 15%;        /* top/bottom 3rem, left/right 15% */
   padding: 2rem 3rem;
   background-color: #323437;
   border-radius: 8px;
@@ -10,7 +10,9 @@
   color: white;
   font-family: "Fira Code", monospace;
   user-select: none;
+  box-sizing: border-box;  /* ensure padding included in width */
 }
+
 
 .words-display {
   display: flex;
@@ -18,8 +20,12 @@
   gap: 8px;
   font-size: 1.8rem;
   line-height: 2.5rem;
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem auto;  /* centers horizontally with auto left/right */
+  width: 70%;                /* occupies 70% of the container/viewport */
+  justify-content: center;   /* centers words inside the flex container */
 }
+
+
 
 .word {
   white-space: nowrap;
