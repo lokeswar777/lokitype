@@ -19,7 +19,7 @@
   flex-wrap: wrap;
   gap: 8px;
   font-size: 1.8rem;
-  line-height: 2.5rem;
+  line-height: 2rem;
   margin: 0 auto 2rem auto;  /* centers horizontally with auto left/right */
   width: 70%;                /* occupies 70% of the container/viewport */
   justify-content: center;   /* centers words inside the flex container */
