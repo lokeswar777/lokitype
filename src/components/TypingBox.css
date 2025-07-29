@@ -1,74 +1,81 @@
 /* src/components/TypingBox.css */
 
+/* === Layout Container === */
 .typing-container {
-  width: 70%;              /* occupy 70% of the viewport width */
- margin: 3rem 15%;      /* top/bottom 3rem, left/right 15% */
- display: flex;
- justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  padding: 2rem 2rem;
-  background-color: #323437;
+  width: 70%;
+  margin: 3rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #1e1e2e; /* Dark violet-blue terminal tone */
   border-radius: 8px;
-  box-shadow: 0 0 15px #1e1e1e;
-  color: white;
-  font-family:   "Fira Code", monospace;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  color: #cdd6f4; /* Soft terminal white */
+  font-family: "Fira Code", monospace;
   user-select: none;
-  box-sizing: border-box;  /* ensure padding included in width */
+  box-sizing: border-box;
 }
 
-
+/* === Word Display Area === */
 .words-display {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   font-size: 1.8rem;
   line-height: 2rem;
-  margin:  auto auto;  /* centers horizontally with auto left/right */
-  width: 70%;                /* occupies 70% of the container/viewport */
-  justify-content: center;   /* centers words inside the flex container */
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
 }
-
-
 
 .word {
   white-space: nowrap;
 }
 
+/* === Character Styling === */
 .char {
   display: inline-block;
   padding: 0 2px;
   border-radius: 3px;
+  transition: all 0.2s ease;
 }
 
 .char.correct {
-  color: #4ade80; /* green */
+  color: #a6e3a1; /* Pastel green */
 }
 
 .char.incorrect {
-  color: #ff4c4c; /* red */
-  background-color: rgba(255, 76, 76, 0.2);
+  color: #f38ba8; /* Elegant rose red */
+  background-color: rgba(243, 139, 168, 0.1);
 }
 
 .char.current {
-  border-bottom: 2px solid #4ade80;
+  border-bottom: 2px solid #f9e2af; /* Muted yellow underline */
 }
 
+/* === Typing Input === */
 .typing-input {
   width: 100%;
   border: none;
   outline: none;
   background: transparent;
-  color: white;
+  color: #cdd6f4;
   font-size: 1.5rem;
   font-family: "Fira Code", monospace;
   padding: 12px 0;
-  border-bottom: 2px solid #4ade80;
+  border-bottom: 2px solid #89dceb; /* Icy cyan underline */
+  caret-color: #89dceb;
   letter-spacing: 2px;
-  caret-color: #4ade80;
   user-select: text;
+  transition: box-shadow 0.2s ease;
 }
 
+.typing-input:focus {
+  box-shadow: 0 2px 10px rgba(137, 220, 235, 0.3);
+}
+
+/* === Stats Display === */
 .stats {
   margin-top: 2rem;
   font-size: 1.3rem;
@@ -78,21 +85,23 @@
 }
 
 .stats span {
-  color: #4ade80;
+  color: #94e2d5; /* Gentle teal for stats */
 }
 
+/* === Buttons === */
 button {
   margin-top: 2rem;
   padding: 10px 24px;
-  background-color: #ff4c4c;
+  background-color: #f38ba8; /* Same as incorrect color */
   border: none;
   border-radius: 6px;
-  color: white;
+  color: #1e1e2e;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 button:hover {
-  background-color: #e03b3b;
+  background-color: #eba0ac;
+  transform: translateY(-2px);
 }
