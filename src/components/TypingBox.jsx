@@ -1,26 +1,49 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./TypingBox.css";
 
-const wordBank = [
-  "Lokeswar", "apple", "banana", "grape", "fast", "keyboard", "react", "javascript",
-  "hello", "code", "type", "fun", "dark", "light", "train", "car", "random",
-  "quiz", "vivid", "window", "xylophone", "zebra", "quick", "jazz", "oxygen", "wizard",
-  "velocity", "exquisite", "buzz", "whiskey", "vortex", "quiver", "fizz", "oxygenate",
-  "quickly", "wax", "zombie", "exodus", "wave", "mix", "quack", "jovial", "zesty",
-  "whale", "fizzing", "vixen", "quickest", "wizardry", "xerox",
-  "Apple", "Banana", "Grape", "Fast", "Keyboard", "React", "Javascript",
-  "Hello", "Code", "Type", "Fun", "Dark", "Light", "Train", "Car", "Random",
-  "Quiz", "Vivid", "Window", "Xylophone", "Zebra", "Quick", "Jazz", "Oxygen", "Wizard",
-  "Velocity", "Exquisite", "Buzz", "Whiskey", "Vortex", "Quiver", "Fizz", "Oxygenate",
-  "Quickly", "Wax", "Zombie", "Exodus", "Wave", "Mix", "Quack", "Jovial", "Zesty",
-  "Whale", "Fizzing", "Vixen", "Quickest", "Wizardry", "Xerox"
+const sentenceBank = [
+  "The quick brown fox jumps over the lazy dog",
+  "Pack my box with five dozen liquor jugs",
+  "Jived fox nymph grabs quick waltz",
+  "Sphinx of black quartz judge my vow",
+  "How vexingly quick daft zebras jump",
+  "Crazy Fredrick bought many very exquisite opal jewels",
+  "We promptly judged antique ivory buckles for the next prize",
+  "Jack quickly moved up the zebra fence",
+  "Bright vixens jump dozy fowl quack",
+  "Waltz bad nymph for quick jigs vex",
+  "Five quacking zephyrs jolt my wax bed",
+  "Quick zephyrs blow vexing daft Jim",
+  "Grumpy wizards make a toxic brew for the jovial queen",
+  "Just keep examining every low bid quoted for zinc etchings",
+  "The job of waxing linoleum frequently peeves chintzy kids",
+  "Sympathizing would fix Quaker objectives",
+  "A wizard’s job is to vex chumps quickly in fog",
+  "Brawny gods just flocked up to quiz and vex him",
+  "Heavy boxes perform quick waltzes and jigs",
+  "Quick blowing zephyrs vex daft Jim",
+  "All questions asked by five watched experts amaze the judge",
+  "Back in June we delivered oxygen equipment of the same size",
+  "The five boxing wizards jump quickly",
+  "When zombies arrive quickly fax Judge Pat",
+  "Mr Jock, TV quiz PhD, bags few lynx",
+  "Cwm fjord bank glyphs vext quiz",
+  "Big fjords vex quick waltz nymph",
+  "Glib jocks quiz nymph to vex dwarf",
+  "Silly buzzing quips vexed Jack the dwarf",
+  "Foxy diva Jennifer Lopez was not baking my quiche"
+  
 ];
 
-const generateWords = (count = 30) =>
-  Array.from({ length: count }, () => wordBank[Math.floor(Math.random() * wordBank.length)]);
+
+const generateSentences = (count = 5) =>
+  Array.from({ length: count }, () => sentenceBank[Math.floor(Math.random() * sentenceBank.length)]);
+
 
 const TypingBox = () => {
-  const [words, setWords] = useState(generateWords());
+
+const [words, setWords] = useState(generateSentences());
+
   const [currentInput, setCurrentInput] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [startTime, setStartTime] = useState(null);

@@ -2,17 +2,19 @@
 
 /* === Layout Container === */
 .typing-container {
-  width: 70%;
+  width: 80%;
   margin: 3rem auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  
   padding: 2rem;
   background-color: #1e1e2e; /* Dark violet-blue terminal tone */
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   color: #cdd6f4; /* Soft terminal white */
-  font-family: "Fira Code", monospace;
+  font-family: Arial, Helvetica, sans-serif;
+  word-spacing: 5px;
+  letter-spacing: 0;
   user-select: none;
   box-sizing: border-box;
 }
