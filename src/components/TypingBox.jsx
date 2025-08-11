@@ -1,49 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./TypingBox.css";
 
-const sentenceBank = [
-  "The quick brown fox jumps over the lazy dog",
-  "Pack my box with five dozen liquor jugs",
-  "Jived fox nymph grabs quick waltz",
-  "Sphinx of black quartz judge my vow",
-  "How vexingly quick daft zebras jump",
-  "Crazy Fredrick bought many very exquisite opal jewels",
-  "We promptly judged antique ivory buckles for the next prize",
-  "Jack quickly moved up the zebra fence",
-  "Bright vixens jump dozy fowl quack",
-  "Waltz bad nymph for quick jigs vex",
-  "Five quacking zephyrs jolt my wax bed",
-  "Quick zephyrs blow vexing daft Jim",
-  "Grumpy wizards make a toxic brew for the jovial queen",
-  "Just keep examining every low bid quoted for zinc etchings",
-  "The job of waxing linoleum frequently peeves chintzy kids",
-  "Sympathizing would fix Quaker objectives",
-  "A wizard’s job is to vex chumps quickly in fog",
-  "Brawny gods just flocked up to quiz and vex him",
-  "Heavy boxes perform quick waltzes and jigs",
-  "Quick blowing zephyrs vex daft Jim",
-  "All questions asked by five watched experts amaze the judge",
-  "Back in June we delivered oxygen equipment of the same size",
-  "The five boxing wizards jump quickly",
-  "When zombies arrive quickly fax Judge Pat",
-  "Mr Jock, TV quiz PhD, bags few lynx",
-  "Cwm fjord bank glyphs vext quiz",
-  "Big fjords vex quick waltz nymph",
-  "Glib jocks quiz nymph to vex dwarf",
-  "Silly buzzing quips vexed Jack the dwarf",
-  "Foxy diva Jennifer Lopez was not baking my quiche"
-  
+// Word bank
+const wordBank = [
+  "cat", "dog", "red", "sun", "sky", "run", "fox", "jam", "cup", "pen",
+  "apple", "grape", "chair", "table", "mouse", "light", "water", "train", "music", "dance",
+  "elephant", "keyboard", "javascript", "computer", "internet", "mountain", "language", "building", "calendar", "chocolate",
+  "quartz", "jigsaw", "vortex", "xylophone", "buzzard", "wizard", "oxygen", "zebra", "quiz", "fizz",
+  "London", "Paris", "Amazon", "Google", "Python", "React", "Tesla", "India", "Tokyo", "Berlin",
+  "banjo", "sphinx", "jovial", "zephyr", "crypt", "plasma", "fjord", "glyph", "whiskey", "puzzle"
 ];
 
-
-const generateSentences = (count = 5) =>
-  Array.from({ length: count }, () => sentenceBank[Math.floor(Math.random() * sentenceBank.length)]);
-
+// Generate random words without consecutive duplicates
+const generateWords = (count = 35) => {
+  let words = [];
+  for (let i = 0; i < count; i++) {
+    let nextWord;
+    do {
+      nextWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+    } while (i > 0 && words[i - 1] === nextWord);
+    words.push(nextWord);
+  }
+  return words;
+};
 
 const TypingBox = () => {
-
-const [words, setWords] = useState(generateSentences());
-
+  const [words, setWords] = useState(generateWords());
   const [currentInput, setCurrentInput] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [startTime, setStartTime] = useState(null);
@@ -65,7 +47,7 @@ const [words, setWords] = useState(generateSentences());
 
     setCurrentInput(value);
 
-    // Count new characters typed (positive difference only)
+    // Count newly typed characters only
     const newChars = Math.max(value.length - currentInput.length, 0);
     setTotalCharsTyped(prev => prev + newChars);
 
@@ -106,50 +88,34 @@ const [words, setWords] = useState(generateSentences());
   };
 
   const renderWord = (word, index) => {
-    // Current word
-    if (index === currentIndex) {
-      return (
-        <span className="word" key={index}>
-          {word.split("").map((char, i) => {
-            let charClass = "char";
+    return (
+      <span key={index} className="word">
+        {word.split("").map((char, i) => {
+          let charClass = "char";
+
+          if (index === currentIndex) {
             if (i < currentInput.length) {
               charClass += currentInput[i] === char ? " correct" : " incorrect";
             }
             if (i === currentInput.length) {
               charClass += " current";
             }
-            return (
-              <span key={i} className={charClass}>{char}</span>
-            );
-          })}
-        </span>
-      );
-    }
-
-    // Previously typed words
-    if (index < currentIndex) {
-      const typed = typedWords[index] || "";
-      return (
-        <span className="word" key={index}>
-          {word.split("").map((char, i) => {
-            let charClass = "char";
+          } else if (index < currentIndex) {
+            const typed = typedWords[index] || "";
             if (i < typed.length) {
               charClass += typed[i] === char ? " correct" : " incorrect";
             } else {
               charClass += " incorrect";
             }
-            return (
-              <span key={i} className={charClass}>{char}</span>
-            );
-          })}
-        </span>
-      );
-    }
+          }
 
-    // Future words
-    return (
-      <span className="word" key={index} style={{ color: "#e0e0e0" }}>
-        {word}
+          return (
+            <span key={i} className={charClass}>
+              {char}
+            </span>
+          );
+        })}
+        <span className="space"> </span> {/* Space between words */}
       </span>
     );
   };

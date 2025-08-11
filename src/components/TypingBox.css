@@ -1,62 +1,56 @@
-/* src/components/TypingBox.css */
-
-/* === Layout Container === */
 .typing-container {
   width: 80%;
   margin: 3rem auto;
-  display: flex;
-  flex-direction: column;
-  
   padding: 2rem;
-  background-color: #1e1e2e; /* Dark violet-blue terminal tone */
+  background-color: #1e1e2e;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  color: #cdd6f4; /* Soft terminal white */
+  color: #cdd6f4;
   font-family: Arial, Helvetica, sans-serif;
-  word-spacing: 5px;
-  letter-spacing: 0;
   user-select: none;
   box-sizing: border-box;
 }
 
-/* === Word Display Area === */
+/* Words flow in a paragraph */
 .words-display {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: block;
   font-size: 1.8rem;
-  line-height: 2rem;
-  justify-content: center;
-  width: 100%;
+  line-height: 2.2rem;
+  white-space: normal; /* allow wrapping naturally */
   margin-bottom: 1.5rem;
 }
 
 .word {
-  white-space: nowrap;
+  display: inline; /* inline so it flows naturally */
 }
 
-/* === Character Styling === */
+.space {
+  display: inline;
+  width: 0.5rem; /* adjustable space width */
+}
+
+/* Character styling */
 .char {
   display: inline-block;
-  padding: 0 2px;
+  padding: 0 1px;
   border-radius: 3px;
   transition: all 0.2s ease;
 }
 
 .char.correct {
-  color: #a6e3a1; /* Pastel green */
+  color: #a6e3a1;
 }
 
 .char.incorrect {
-  color: #f38ba8; /* Elegant rose red */
+  color: #f38ba8;
   background-color: rgba(243, 139, 168, 0.1);
 }
 
 .char.current {
-  border-bottom: 2px solid #f9e2af; /* Muted yellow underline */
+  border-bottom: 2px solid #f9e2af;
 }
 
-/* === Typing Input === */
+/* Typing input */
 .typing-input {
   width: 100%;
   border: none;
@@ -66,18 +60,16 @@
   font-size: 1.5rem;
   font-family: "Fira Code", monospace;
   padding: 12px 0;
-  border-bottom: 2px solid #89dceb; /* Icy cyan underline */
+  border-bottom: 2px solid #89dceb;
   caret-color: #89dceb;
   letter-spacing: 2px;
-  user-select: text;
-  transition: box-shadow 0.2s ease;
 }
 
 .typing-input:focus {
   box-shadow: 0 2px 10px rgba(137, 220, 235, 0.3);
 }
 
-/* === Stats Display === */
+/* Stats */
 .stats {
   margin-top: 2rem;
   font-size: 1.3rem;
@@ -87,14 +79,14 @@
 }
 
 .stats span {
-  color: #94e2d5; /* Gentle teal for stats */
+  color: #94e2d5;
 }
 
-/* === Buttons === */
+/* Button */
 button {
   margin-top: 2rem;
   padding: 10px 24px;
-  background-color: #f38ba8; /* Same as incorrect color */
+  background-color: #f38ba8;
   border: none;
   border-radius: 6px;
   color: #1e1e2e;
