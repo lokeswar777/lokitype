@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./TypingBox.css";
 
-// Word bank
 const wordBank = [
   "cat", "dog", "red", "sun", "sky", "run", "fox", "jam", "cup", "pen",
   "apple", "grape", "chair", "table", "mouse", "light", "water", "train", "music", "dance",
@@ -11,8 +10,7 @@ const wordBank = [
   "banjo", "sphinx", "jovial", "zephyr", "crypt", "plasma", "fjord", "glyph", "whiskey", "puzzle"
 ];
 
-// Generate random words without consecutive duplicates
-const generateWords = (count = 35) => {
+const generateWords = (count = 30) => {
   let words = [];
   for (let i = 0; i < count; i++) {
     let nextWord;
@@ -28,46 +26,54 @@ const TypingBox = () => {
   const [words, setWords] = useState(generateWords());
   const [currentInput, setCurrentInput] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [startTime, setStartTime] = useState(null);
-  const [finished, setFinished] = useState(false);
+  const [typedWords, setTypedWords] = useState([]);
   const [correctChars, setCorrectChars] = useState(0);
   const [totalCharsTyped, setTotalCharsTyped] = useState(0);
-  const [typedWords, setTypedWords] = useState([]);
-  const inputRef = useRef(null);
+  const [startTime, setStartTime] = useState(null);
+  const [finished, setFinished] = useState(false);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    inputRef.current.focus();
+    containerRef.current.focus();
   }, []);
 
-  const handleInputChange = (e) => {
+  const handleKeyDown = (e) => {
     if (finished) return;
 
-    const value = e.target.value;
     if (!startTime) setStartTime(Date.now());
 
-    setCurrentInput(value);
-
-    // Count newly typed characters only
-    const newChars = Math.max(value.length - currentInput.length, 0);
-    setTotalCharsTyped(prev => prev + newChars);
-
-    if (value.endsWith(" ")) {
-      const wordTyped = value.trim();
+    if (e.key === " ") {
+      e.preventDefault();
       const currentWord = words[currentIndex];
-
       let correctCharsInWord = 0;
-      for (let i = 0; i < Math.min(wordTyped.length, currentWord.length); i++) {
-        if (wordTyped[i] === currentWord[i]) correctCharsInWord++;
+
+      for (let i = 0; i < Math.min(currentInput.length, currentWord.length); i++) {
+        if (currentInput[i] === currentWord[i]) correctCharsInWord++;
       }
 
       setCorrectChars(prev => prev + correctCharsInWord);
-      setTypedWords(prev => [...prev, wordTyped]);
+      setTypedWords(prev => [...prev, currentInput]);
       setCurrentInput("");
       setCurrentIndex(prev => prev + 1);
 
       if (currentIndex + 1 === words.length) {
         setFinished(true);
       }
+      return;
+    }
+
+    if (e.key === "Backspace") {
+      if (currentInput.length > 0) {
+        setCurrentInput(prev => prev.slice(0, -1));
+        setTotalCharsTyped(prev => prev - 1);
+      }
+      e.preventDefault(); // stops going back to previous word
+      return;
+    }
+
+    if (e.key.length === 1) {
+      setCurrentInput(prev => prev + e.key);
+      setTotalCharsTyped(prev => prev + 1);
     }
   };
 
@@ -115,28 +121,21 @@ const TypingBox = () => {
             </span>
           );
         })}
-        <span className="space"> </span> {/* Space between words */}
+        <span className="space"> </span>
       </span>
     );
   };
 
   return (
     <div className="typing-container">
-      <div className="words-display">
+      <div
+        className="words-display"
+        ref={containerRef}
+        tabIndex="0"
+        onKeyDown={handleKeyDown}
+      >
         {words.map((word, index) => renderWord(word, index))}
       </div>
-
-      <input
-        ref={inputRef}
-        className="typing-input"
-        type="text"
-        value={currentInput}
-        onChange={handleInputChange}
-        disabled={finished}
-        placeholder="Start typing..."
-        spellCheck={false}
-        autoComplete="off"
-      />
 
       <div className="stats">
         <span>WPM: {calculateWPM()}</span>

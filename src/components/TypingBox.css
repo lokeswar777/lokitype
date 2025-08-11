@@ -1,35 +1,37 @@
 .typing-container {
   width: 80%;
+  height: 60vh;
   margin: 3rem auto;
   padding: 2rem;
   background-color: #1e1e2e;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   color: #cdd6f4;
-  font-family: Arial, Helvetica, sans-serif;
-  user-select: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif, Helvetica, sans-serif;
   box-sizing: border-box;
+
+  box-shadow:#05ebc5 15px;
 }
 
-/* Words flow in a paragraph */
 .words-display {
-  display: block;
   font-size: 1.8rem;
-  line-height: 2.2rem;
-  white-space: normal; /* allow wrapping naturally */
+  line-height: 3.2rem;
+  white-space: normal;
+  outline: none;
+  
   margin-bottom: 1.5rem;
+  cursor: text;
 }
 
 .word {
-  display: inline; /* inline so it flows naturally */
+  display: inline;
 }
 
 .space {
   display: inline;
-  width: 0.5rem; /* adjustable space width */
+  width: 0.5rem;
 }
 
-/* Character styling */
 .char {
   display: inline-block;
   padding: 0 1px;
@@ -50,26 +52,6 @@
   border-bottom: 2px solid #f9e2af;
 }
 
-/* Typing input */
-.typing-input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #cdd6f4;
-  font-size: 1.5rem;
-  font-family: "Fira Code", monospace;
-  padding: 12px 0;
-  border-bottom: 2px solid #89dceb;
-  caret-color: #89dceb;
-  letter-spacing: 2px;
-}
-
-.typing-input:focus {
-  box-shadow: 0 2px 10px rgba(137, 220, 235, 0.3);
-}
-
-/* Stats */
 .stats {
   margin-top: 2rem;
   font-size: 1.3rem;
@@ -82,7 +64,6 @@
   color: #94e2d5;
 }
 
-/* Button */
 button {
   margin-top: 2rem;
   padding: 10px 24px;
