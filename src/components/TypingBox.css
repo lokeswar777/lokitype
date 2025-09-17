@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  color: #f9e2af;
+  color: #89b4fa; /* Softer blue for timer text */
 }
 
 .timer {
@@ -18,15 +18,15 @@
 
 .time-btn {
   background: none;
-  border: 1px solid #cdd6f4;
-  color: #cdd6f4;
+  border: 1px solid #45475a; /* Muted border for inactive buttons */
+  color: #bac2de;
   opacity: 0.6;
 }
 
 .time-btn.active {
   opacity: 1;
-  background-color: rgba(249, 226, 175, 0.2);
-  border-color: #f9e2af;
+  background-color: rgba(137, 180, 250, 0.1); /* Subtle blue glow */
+  border-color: #89b4fa; /* Active blue border */
 }
 
 .typing-container {
@@ -34,10 +34,10 @@
   height: 60vh;
   margin: 3rem auto;
   padding: 2rem;
-  background-color: #1e1e2e;
+  background-color: #181825; /* Slightly lighter container background */
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  color: #cdd6f4;
+  color: #cdd6f4; /* Keeping the main text color */
   font-family: Verdana, Geneva, Tahoma, sans-serif, Helvetica, sans-serif;
   box-sizing: border-box;
 
@@ -71,17 +71,17 @@
 }
 
 .char.correct {
-  color: #a6e3a1;
+  color: #a6e3a1; /* Keeping green for correct, it's a good universal indicator */
 }
 
 .char.incorrect {
-  color: #f38ba8;
-  background-color: rgba(243, 139, 168, 0.1);
+  color: #f38ba8; /* Keeping red for incorrect */
+  background-color: rgba(243, 139, 168, 0.1); /* Subtle red background for errors */
 }
 
 .char.current {
-  background-color: #f9e2af;
-  color: #1e1e2e;
+  background-color: #89b4fa; /* Blue cursor */
+  color: #11111b; /* Dark text on cursor */
   border-radius: 3px;
   animation: blink 1s infinite;
 }
@@ -101,22 +101,22 @@
 button {
   margin-top: 2rem;
   padding: 10px 24px;
-  background-color: #f38ba8;
+  background-color: #74c7ec; /* A calming cyan for the reset button */
   border: none;
   border-radius: 6px;
-  color: #1e1e2e;
+  color: #11111b;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 button:hover {
-  background-color: #eba0ac;
+  background-color: #89dceb;
   transform: translateY(-2px);
 }
 
 @keyframes blink {
-  0%, 100% { background-color: #f9e2af; }
+  0%, 100% { background-color: #89b4fa; }
   50% { background-color: transparent; }
 }
 
