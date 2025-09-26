@@ -208,7 +208,7 @@ const TypingBox = () => {
         <span>Accuracy: {finished ? `${calculateAccuracy()}%` : "-"}</span>
       </div>
 
-      <button onClick={resetTest}>Reset</button>
+      <button className="reset-btn" onClick={resetTest}>Reset</button>
     </div>
   );
 };

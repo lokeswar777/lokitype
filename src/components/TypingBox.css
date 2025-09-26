@@ -111,7 +111,7 @@ button {
 }
 
 button:hover {
-  background-color: #89dceb;
+  background-color: #0e60f7;
   transform: translateY(-2px);
 }
 
@@ -126,4 +126,8 @@ button:hover {
     gap: 1rem;
     margin-bottom: 2rem;
   }
+}
+
+.reset-btn{
+  margin-top: 8vh;
 }
