@@ -8,10 +8,11 @@ function App() {
       <span>o</span>
       <span>k</span>
       <span>i</span>
-      <span> </span>
+      <span>    </span>
       <span>t</span>
       <span>y</span>
-      <span>p</span><span>e</span>
+      <span>p</span>
+      <span>e</span>
        </h1>
       <TypingBox />
     </div>
