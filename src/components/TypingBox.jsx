@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./TypingBox.css";
 
 const wordBank = [
@@ -33,6 +33,7 @@ const TypingBox = () => {
   const [timeLimit, setTimeLimit] = useState(30);
   const [timeLeft, setTimeLeft] = useState(timeLimit);
   const [testStarted, setTestStarted] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const containerRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -47,6 +48,7 @@ const TypingBox = () => {
     setFinished(false);
     setTimeLeft(timeLimit);
     setTestStarted(false);
+    containerRef.current.scrollTop = 0;
     containerRef.current.focus();
   }, [timeLimit]);
 
@@ -54,16 +56,16 @@ const TypingBox = () => {
     resetTest();
   }, [resetTest]);
 
+  // Keep the active line as the second visible line so upcoming words stay in view.
   useEffect(() => {
-    if (containerRef.current && testStarted) {
-      const currentWordEl = containerRef.current.querySelector('.word.current-word');
-      if (currentWordEl) {
-        const container = containerRef.current;
-        const wordTop = currentWordEl.offsetTop;
-        const containerTop = container.offsetTop;
-        container.scrollTop = wordTop - containerTop - container.clientHeight / 3;
-      }
-    }
+    const container = containerRef.current;
+    if (!container || !testStarted) return;
+    const currentWordEl = container.querySelector(".word.current-word");
+    if (!currentWordEl) return;
+    const lineHeight =
+      parseFloat(getComputedStyle(container).lineHeight) || currentWordEl.offsetHeight;
+    const line = Math.round((currentWordEl.offsetTop - container.offsetTop) / lineHeight);
+    container.scrollTop = Math.max(0, (line - 1) * lineHeight);
   }, [currentIndex, testStarted]);
 
   useEffect(() => {
@@ -173,20 +175,47 @@ const TypingBox = () => {
             </span>
           );
         })}
-        <span className="space"> </span>
+        <span
+          className={`space${
+            index === currentIndex && currentInput.length >= word.length ? " current" : ""
+          }`}
+        >
+          {" "}
+        </span>
       </span>
     );
   };
 
+  const wpm = calculateWPM();
+  const accuracy = calculateAccuracy();
+
+  let statusMessage = "Start typing to begin. The timer starts on your first keystroke.";
+  if (finished) {
+    statusMessage = `Time's up! ${wpm} WPM at ${accuracy}% accuracy.`;
+  } else if (testStarted) {
+    statusMessage = "Keep going. Press space to move to the next word.";
+  }
+
+  const progress = timeLimit > 0 ? timeLeft / timeLimit : 0;
+
   return (
-    <div className="typing-container">
+    <section className="typing-container" aria-labelledby="typing-heading">
+      <h2 id="typing-heading" className="visually-hidden">
+        Typing test
+      </h2>
+
       <div className="controls">
-        <div className="timer">{timeLeft}</div>
-        <div className="time-options">
+        <div className="timer" role="timer" aria-label={`${timeLeft} seconds remaining`}>
+          <span className="timer-value">{timeLeft}</span>
+          <span className="timer-unit" aria-hidden="true">s</span>
+        </div>
+        <div className="time-options" role="group" aria-label="Test duration">
           {[15, 30, 60, 120].map((time) => (
             <button
               key={time}
+              type="button"
               className={`time-btn ${timeLimit === time ? "active" : ""}`}
+              aria-pressed={timeLimit === time}
               onClick={() => handleTimeChange(time)}
             >
               {time}s
@@ -194,22 +223,65 @@ const TypingBox = () => {
           ))}
         </div>
       </div>
+
+      <div className="progress" aria-hidden="true">
+        <div className="progress-bar" style={{ transform: `scaleX(${progress})` }} />
+      </div>
+
       <div
-        className="words-display"
-        ref={containerRef}
-        tabIndex="0"
-        onKeyDown={handleKeyDown}
+        className={`words-wrapper${isFocused ? " is-focused" : ""}${
+          finished ? " is-finished" : ""
+        }`}
       >
-        {words.map((word, index) => renderWord(word, index))}
+        <div
+          className="words-display"
+          ref={containerRef}
+          tabIndex="0"
+          role="textbox"
+          aria-label="Typing area"
+          aria-describedby="typing-status"
+          onKeyDown={handleKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        >
+          {words.map((word, index) => renderWord(word, index))}
+        </div>
+        <div className="focus-hint" aria-hidden="true">
+          <span>Click here to focus and start typing</span>
+        </div>
       </div>
 
-      <div className="stats">
-        <span>WPM: {finished ? calculateWPM() : "-"}</span>
-        <span>Accuracy: {finished ? `${calculateAccuracy()}%` : "-"}</span>
-      </div>
+      <p id="typing-status" className="status" aria-live="polite">
+        {statusMessage}
+      </p>
 
-      <button className="reset-btn" onClick={resetTest}>Reset</button>
-    </div>
+      <dl className={`stats${finished ? " is-final" : ""}`}>
+        <div className="stat">
+          <dt>WPM</dt>
+          <dd>{finished ? wpm : "-"}</dd>
+        </div>
+        <div className="stat">
+          <dt>Accuracy</dt>
+          <dd>{finished ? `${accuracy}%` : "-"}</dd>
+        </div>
+      </dl>
+
+      <div className="actions">
+        <button type="button" className="btn btn-primary reset-btn" onClick={resetTest}>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"
+            />
+          </svg>
+          Reset
+        </button>
+      </div>
+    </section>
   );
 };
 
