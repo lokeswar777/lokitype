@@ -13,15 +13,22 @@ function App() {
         <h1 className="logo">
           <span className="visually-hidden">{LOGO_TEXT}</span>
           <span className="logo-letters" aria-hidden="true">
-            {[...LOGO_TEXT].map((char, i) =>
-              char === " " ? (
-                <span key={i} className="logo-space" />
+            {[...LOGO_TEXT].map((char, i) => {
+              // --i drives the staggered typing animation in index.css.
+              const style = { "--i": i };
+              const last = i === LOGO_TEXT.length - 1 ? " logo-char--last" : "";
+              return char === " " ? (
+                <span key={i} className={`logo-space logo-char${last}`} style={style} />
               ) : (
-                <span key={i} className={i > 4 ? "logo-letter logo-letter--accent" : "logo-letter"}>
+                <span
+                  key={i}
+                  className={`logo-letter logo-char${i > 4 ? " logo-letter--accent" : ""}${last}`}
+                  style={style}
+                >
                   {char}
                 </span>
-              )
-            )}
+              );
+            })}
           </span>
         </h1>
         <ThemeSwitcher theme={theme} onChange={setTheme} />
