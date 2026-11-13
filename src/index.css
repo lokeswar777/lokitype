@@ -5,6 +5,7 @@
   --bg-glow: rgba(110, 168, 255, 0.08);
   --surface: #121826;
   --surface-2: #1a2233;
+  --surface-raised: #121826;
   --border: #263047;
   --border-strong: #34405c;
   --text: #e6eaf2;
@@ -20,6 +21,8 @@
   --focus-ring: #8dbbff;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.35);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --glass-blur: none;
+  --glass-bg-opacity: 0;
 
   /* Type & spacing */
   --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -31,9 +34,9 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
   --space-7: 3rem;
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 18px;
+  --radius-sm: 0.5rem;
+  --radius: 0.75rem;
+  --radius-lg: 1.125rem;
   --gutter: clamp(1rem, 4vw, 2.5rem);
 
   /* Motion */
@@ -64,6 +67,7 @@
   --bg-glow: rgba(29, 78, 216, 0.07);
   --surface: #ffffff;
   --surface-2: #eef1f7;
+  --surface-raised: #ffffff;
   --border: #d9dfeb;
   --border-strong: #b9c2d6;
   --text: #121826;
@@ -83,7 +87,63 @@
   color-scheme: light;
 }
 
+/* Glass: frosted, translucent panels over soft color glows (dark based). */
+:root[data-theme="glass"] {
+  --bg: #0b1030;
+  --bg-glow: rgba(165, 200, 255, 0.06);
+  --surface: rgba(18, 26, 61, 0.55);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --surface-raised: rgba(18, 26, 61, 0.9);
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --text: #f4f6ff;
+  --text-muted: #c4cce4;
+  --accent: #a5c8ff;
+  --accent-hover: #c2daff;
+  --accent-soft: rgba(165, 200, 255, 0.16);
+  --on-accent: #0b1030;
+  --correct: #86efac;
+  --incorrect: #ffa8b8;
+  --incorrect-soft: rgba(255, 168, 184, 0.16);
+  --logo-hover: #ffb27a;
+  --focus-ring: #c2daff;
+  --shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 20px 50px rgba(3, 6, 25, 0.45);
+  --shadow-sm: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 8px rgba(3, 6, 25, 0.3);
+  --glass-blur: blur(22px) saturate(160%);
+  --glass-bg-opacity: 1;
+
+  color-scheme: dark;
+}
+
+/* No backdrop-filter support: make glass panels nearly opaque so text stays readable. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root[data-theme="glass"] {
+    --surface: rgba(18, 26, 61, 0.92);
+  }
+}
+
+/* Users who ask for less transparency get solid glass-colored panels. */
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-theme="glass"] {
+    --surface: #16204a;
+    --surface-2: #1f2a57;
+    --surface-raised: #16204a;
+    --glass-blur: none;
+  }
+}
+
 /* ---------- Base ---------- */
+/*
+ * Fluid base size: everything sized in rem scales with the device.
+ * - Never smaller than the browser's default (respects user font settings and zoom).
+ * - Grows with viewport width on large monitors...
+ * - ...but is capped by viewport height so the whole test fits on short screens.
+ */
+html {
+  font-size: clamp(1rem, min(0.4vw + 0.7rem, 2.1vh), 1.375rem);
+  transition: background-color var(--dur) var(--ease);
+}
+
 *,
 *::before,
 *::after {
@@ -96,10 +156,32 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   color: var(--text);
-  background-color: var(--bg);
-  background-image: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-glow), transparent 70%);
-  background-repeat: no-repeat;
-  transition: var(--theme-transition);
+  /* Transparent so the fixed background layers below show; <html> paints --bg. */
+  transition: color var(--dur) var(--ease);
+}
+
+/* Fixed background layers: a soft top glow, and the glass theme's color glows,
+   which fade in and out when the theme changes. */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  background: radial-gradient(60rem 30rem at 50% -10rem, var(--bg-glow), transparent 70%);
+}
+
+body::after {
+  opacity: var(--glass-bg-opacity);
+  background:
+    radial-gradient(40rem 32rem at 12% 18%, rgba(59, 91, 219, 0.45), transparent 65%),
+    radial-gradient(36rem 30rem at 88% 24%, rgba(124, 58, 237, 0.38), transparent 65%),
+    radial-gradient(44rem 34rem at 55% 105%, rgba(8, 145, 178, 0.3), transparent 65%);
+  transition: opacity 400ms var(--ease);
 }
 
 h1,
@@ -162,7 +244,7 @@ kbd {
   flex-direction: column;
   gap: var(--space-6);
   width: 100%;
-  max-width: 1000px;
+  max-width: 62.5rem;
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0 auto;
@@ -234,7 +316,7 @@ kbd {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: 44px;
+  min-height: 2.75rem;
   padding: 0.6rem 1.25rem;
   border: 1px solid transparent;
   border-radius: var(--radius);
@@ -260,87 +342,83 @@ kbd {
   transform: translateY(-1px);
 }
 
-/* ---------- Theme toggle ---------- */
-.theme-toggle {
+/* ---------- Theme switcher ---------- */
+.theme-switcher {
   display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  min-height: 44px;
-  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  gap: var(--space-1);
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--space-1);
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--surface);
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   transition: var(--theme-transition);
 }
 
-.theme-toggle:hover {
-  color: var(--text);
-  border-color: var(--border-strong);
+.theme-option {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
 }
 
-.theme-toggle-track {
-  position: relative;
+/* Native radio stays focusable and keyboard-operable; the face shows its state. */
+.theme-option-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theme-option-face {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  width: 56px;
-  height: 32px;
-  padding: 0 8px;
+  justify-content: center;
+  gap: 0.375rem;
+  min-height: 2.25rem;
+  padding: 0 var(--space-3);
   border-radius: 999px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
   transition: var(--theme-transition);
 }
 
-.theme-toggle-icon {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  color: var(--text-muted);
-  transition: color var(--dur) var(--ease);
+.theme-option-face svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
 }
 
-.theme-toggle-thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform var(--dur) var(--ease),
-    background-color var(--dur) var(--ease);
+.theme-option:hover .theme-option-face {
+  color: var(--text);
+  background-color: var(--accent-soft);
 }
 
-.theme-toggle[aria-checked="true"] .theme-toggle-thumb {
-  transform: translateX(24px);
-}
-
-/* The icon under the thumb sits on the accent color. */
-.theme-toggle[aria-checked="false"] .theme-toggle-icon--sun,
-.theme-toggle[aria-checked="true"] .theme-toggle-icon--moon {
+.theme-option-input:checked + .theme-option-face {
   color: var(--on-accent);
+  background-color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-option-input:focus-visible + .theme-option-face {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 479px) {
-  .app {
-    gap: var(--space-5);
-    padding-top: var(--space-4);
+@media (max-width: 599px) {
+  /* Icon-only theme options; the label stays as the accessible name. */
+  .theme-option-face {
+    width: 2.25rem;
+    padding: 0;
   }
 
-  .theme-toggle {
-    padding: var(--space-1);
-  }
-
-  /* Keep the accessible name, hide the visible text on narrow screens. */
-  .theme-toggle-label {
+  .theme-option-label {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -348,11 +426,66 @@ kbd {
     clip: rect(0 0 0 0);
     white-space: nowrap;
   }
+}
+
+@media (max-width: 479px) {
+  .app {
+    gap: var(--space-5);
+    padding-top: var(--space-4);
+  }
+
+  .site-header {
+    gap: var(--space-2);
+  }
 
   .footer-sep {
     display: block;
     height: var(--space-1);
     visibility: hidden;
+  }
+}
+
+@media (max-width: 380px) {
+  .logo {
+    font-size: 1.375rem;
+  }
+}
+
+/* Short screens (small laptops, phones in landscape): tighten vertical rhythm. */
+@media (max-height: 800px) {
+  .app {
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-3);
+  }
+}
+
+@media (max-height: 600px) {
+  .app {
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-2);
+  }
+
+  /* Keyboard hints are least useful here and cost the most space. */
+  .site-footer {
+    display: none;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .app {
+    gap: var(--space-3);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .theme-option-face {
+    min-height: 2rem;
   }
 }
 

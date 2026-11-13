@@ -19,7 +19,7 @@
         var theme = "dark";
         try {
           var saved = localStorage.getItem("lokitype-theme");
-          if (saved === "light" || saved === "dark") {
+          if (saved === "light" || saved === "dark" || saved === "glass") {
             theme = saved;
           } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
             theme = "light";
@@ -29,7 +29,8 @@
         }
         document.documentElement.setAttribute("data-theme", theme);
         var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute("content", theme === "light" ? "#f3f5fa" : "#0b0f17");
+        var colors = { light: "#f3f5fa", dark: "#0b0f17", glass: "#0b1030" };
+        if (meta) meta.setAttribute("content", colors[theme]);
       })();
     </script>
   </head>
