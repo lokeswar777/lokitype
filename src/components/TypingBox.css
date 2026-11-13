@@ -1,133 +1,327 @@
+/* ---------- Card ---------- */
+.typing-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+  padding: clamp(1rem, 3vw, 2rem);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  transition: var(--theme-transition);
+}
+
+/* ---------- Controls ---------- */
 .controls {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 1.5rem;
-  color: #89b4fa; /* Softer blue for timer text */
+  justify-content: space-between;
+  gap: var(--space-4);
 }
 
 .timer {
-  font-size: 2rem;
-  font-weight: bold;
+  display: flex;
+  align-items: baseline;
+  gap: 0.15em;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.timer-value {
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  font-weight: 500;
+  color: var(--accent);
+  transition: color var(--dur) var(--ease);
+}
+
+.timer-unit {
+  font-size: 1.125rem;
+  color: var(--text-muted);
 }
 
 .time-options {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--theme-transition);
 }
 
 .time-btn {
-  background: none;
-  border: 1px solid #45475a; /* Muted border for inactive buttons */
-  color: #bac2de;
-  opacity: 0.6;
+  min-width: 56px;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.time-btn:hover {
+  color: var(--text);
+  background-color: var(--accent-soft);
 }
 
 .time-btn.active {
-  opacity: 1;
-  background-color: rgba(137, 180, 250, 0.1); /* Subtle blue glow */
-  border-color: #89b4fa; /* Active blue border */
+  color: var(--on-accent);
+  background-color: var(--accent);
+  box-shadow: var(--shadow-sm);
 }
 
-.typing-container {
-  width: 80%;
-  height: 60vh;
-  margin: 3rem auto;
-  padding: 2rem;
-  background-color: #181825; /* Slightly lighter container background */
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  color: #cdd6f4; /* Keeping the main text color */
-  font-family: Verdana, Geneva, Tahoma, sans-serif, Helvetica, sans-serif;
-  box-sizing: border-box;
+/* ---------- Time progress ---------- */
+.progress {
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--surface-2);
+  transition: var(--theme-transition);
+}
 
+.progress-bar {
+  height: 100%;
+  background-color: var(--accent);
+  transform-origin: left center;
+  transition:
+    transform 1s linear,
+    background-color var(--dur) var(--ease);
+}
+
+/* ---------- Words ---------- */
+.words-wrapper {
+  /* The scroll logic in TypingBox relies on .words-display itself not being positioned. */
+  position: relative;
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--theme-transition);
+}
+
+.words-wrapper.is-focused {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 0 5px var(--accent-soft);
 }
 
 .words-display {
-  font-size: 1.5rem;
-  line-height: 3.2rem;
-  white-space: normal;
-  outline: none; 
-  margin-bottom: 1.5rem;
-  cursor: text;
+  --line: 3rem;
+  height: calc(var(--line) * 3);
   overflow: hidden;
-  height: 10rem; /* approx 3 lines */
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  line-height: var(--line);
+  white-space: normal;
+  color: var(--text-muted);
+  cursor: text;
+  outline: none;
+  transition: opacity var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
+/* Focus is shown on the surrounding .words-wrapper instead. */
+.words-display:focus-visible {
+  outline: none;
+}
+
+.words-wrapper.is-finished .words-display {
+  opacity: 0.55;
+}
+
+/* Inline-block keeps each word together when lines wrap. */
 .word {
-  display: inline;
+  display: inline-block;
+}
+
+.char,
+.space {
+  display: inline-block;
+  border-radius: 3px;
+  transition:
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease);
 }
 
 .space {
-  display: inline;
-  width: 0.5rem;
-}
-
-.char {
-  display: inline-block;
-  padding: 0 1px;
-  border-radius: 3px;
-  transition: all 0.2s ease;
+  white-space: pre;
 }
 
 .char.correct {
-  color: #a6e3a1; /* Keeping green for correct, it's a good universal indicator */
+  color: var(--correct);
 }
 
 .char.incorrect {
-  color: #f38ba8; /* Keeping red for incorrect */
-  background-color: rgba(243, 139, 168, 0.1); /* Subtle red background for errors */
+  color: var(--incorrect);
+  background-color: var(--incorrect-soft);
 }
 
-.char.current {
-  background-color: #89b4fa; /* Blue cursor */
-  color: #11111b; /* Dark text on cursor */
-  border-radius: 3px;
+.char.current,
+.space.current {
+  background-color: var(--accent);
+  color: var(--on-accent);
   animation: blink 1s infinite;
 }
 
-.stats {
-  margin-top: 2rem;
-  font-size: 1.3rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.stats span {
-  color: #94e2d5;
-}
-
-button {
-  margin-top: 2rem;
-  padding: 10px 24px;
-  background-color: #74c7ec; /* A calming cyan for the reset button */
-  border: none;
-  border-radius: 6px;
-  color: #11111b;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-}
-
-button:hover {
-  background-color: #0e60f7;
-  transform: translateY(-2px);
-}
-
 @keyframes blink {
-  0%, 100% { background-color: #89b4fa; }
-  50% { background-color: transparent; }
-}
-
-@media (max-width: 768px) {
-  .controls {
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+  0%,
+  100% {
+    background-color: var(--accent);
+    color: var(--on-accent);
+  }
+  50% {
+    background-color: transparent;
+    color: var(--text-muted);
   }
 }
 
-.reset-btn{
-  margin-top: 8vh;
+.focus-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  border-radius: inherit;
+  background-color: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  color: var(--text);
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.focus-hint span {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.words-wrapper.is-focused .focus-hint,
+.words-wrapper.is-finished .focus-hint {
+  opacity: 0;
+}
+
+/* ---------- Status & stats ---------- */
+.status {
+  min-height: 1.5em;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  max-width: 420px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--theme-transition);
+}
+
+.stat dt {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stat dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: var(--text);
+  transition: color var(--dur) var(--ease);
+}
+
+.stats.is-final .stat {
+  border-color: var(--accent);
+}
+
+.stats.is-final .stat dd {
+  color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.reset-btn {
+  min-width: 140px;
+}
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .words-display {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Solid cursor instead of blinking. */
+  .char.current,
+  .space.current {
+    animation: none;
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .words-display {
+    --line: 2.5rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .time-options {
+    width: 100%;
+  }
+
+  .time-btn {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .words-wrapper {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .words-display {
+    --line: 2.25rem;
+    font-size: 1.1rem;
+  }
+
+  .stats {
+    gap: var(--space-3);
+  }
 }
