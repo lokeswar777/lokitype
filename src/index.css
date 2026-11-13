@@ -31,9 +31,9 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
   --space-7: 3rem;
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 18px;
+  --radius-sm: 0.5rem;
+  --radius: 0.75rem;
+  --radius-lg: 1.125rem;
   --gutter: clamp(1rem, 4vw, 2.5rem);
 
   /* Motion */
@@ -84,6 +84,16 @@
 }
 
 /* ---------- Base ---------- */
+/*
+ * Fluid base size: everything sized in rem scales with the device.
+ * - Never smaller than the browser's default (respects user font settings and zoom).
+ * - Grows with viewport width on large monitors...
+ * - ...but is capped by viewport height so the whole test fits on short screens.
+ */
+html {
+  font-size: clamp(1rem, min(0.4vw + 0.7rem, 2.1vh), 1.375rem);
+}
+
 *,
 *::before,
 *::after {
@@ -162,7 +172,7 @@ kbd {
   flex-direction: column;
   gap: var(--space-6);
   width: 100%;
-  max-width: 1000px;
+  max-width: 62.5rem;
   min-height: 100vh;
   min-height: 100dvh;
   margin: 0 auto;
@@ -234,7 +244,7 @@ kbd {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: 44px;
+  min-height: 2.75rem;
   padding: 0.6rem 1.25rem;
   border: 1px solid transparent;
   border-radius: var(--radius);
@@ -265,7 +275,7 @@ kbd {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
-  min-height: 44px;
+  min-height: 2.75rem;
   padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -287,9 +297,9 @@ kbd {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  width: 56px;
-  height: 32px;
-  padding: 0 8px;
+  width: 3.5rem;
+  height: 2rem;
+  padding: 0 0.5rem;
   border-radius: 999px;
   background: var(--surface-2);
   border: 1px solid var(--border);
@@ -304,12 +314,17 @@ kbd {
   transition: color var(--dur) var(--ease);
 }
 
+.theme-toggle-icon svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
 .theme-toggle-thumb {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 24px;
-  height: 24px;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
   background: var(--accent);
   box-shadow: var(--shadow-sm);
@@ -319,7 +334,7 @@ kbd {
 }
 
 .theme-toggle[aria-checked="true"] .theme-toggle-thumb {
-  transform: translateX(24px);
+  transform: translateX(1.5rem);
 }
 
 /* The icon under the thumb sits on the accent color. */
@@ -353,6 +368,44 @@ kbd {
     display: block;
     height: var(--space-1);
     visibility: hidden;
+  }
+}
+
+/* Short screens (small laptops, phones in landscape): tighten vertical rhythm. */
+@media (max-height: 800px) {
+  .app {
+    gap: var(--space-4);
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-3);
+  }
+}
+
+@media (max-height: 600px) {
+  .app {
+    gap: var(--space-3);
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-2);
+  }
+
+  /* Keyboard hints are least useful here and cost the most space. */
+  .site-footer {
+    display: none;
+  }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .app {
+    gap: var(--space-3);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .theme-toggle {
+    min-height: 2.5rem;
   }
 }
 

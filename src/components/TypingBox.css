@@ -54,8 +54,8 @@
 }
 
 .time-btn {
-  min-width: 56px;
-  min-height: 40px;
+  min-width: 3.5rem;
+  min-height: 2.5rem;
   padding: var(--space-2) var(--space-3);
   border: 0;
   border-radius: var(--radius-sm);
@@ -81,7 +81,7 @@
 
 /* ---------- Time progress ---------- */
 .progress {
-  height: 4px;
+  height: 0.25rem;
   overflow: hidden;
   border-radius: 999px;
   background-color: var(--surface-2);
@@ -226,7 +226,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
-  max-width: 420px;
+  max-width: 26rem;
   width: 100%;
   margin: 0 auto;
 }
@@ -276,7 +276,12 @@
 }
 
 .reset-btn {
-  min-width: 140px;
+  min-width: 8.75rem;
+}
+
+.reset-btn svg {
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
 /* ---------- Motion ---------- */
@@ -295,6 +300,44 @@
 }
 
 /* ---------- Responsive ---------- */
+/* Short screens: tighten spacing so the whole test fits without scrolling. */
+@media (max-height: 800px) {
+  .typing-container {
+    gap: var(--space-4);
+  }
+
+  .stat {
+    padding: var(--space-3);
+  }
+}
+
+@media (max-height: 700px) {
+  .typing-container {
+    gap: var(--space-3);
+  }
+
+  .timer-value {
+    font-size: 2.25rem;
+  }
+
+  .words-display {
+    --line: 2.5rem;
+    font-size: 1.25rem;
+  }
+
+  .status {
+    font-size: 0.875rem;
+  }
+
+  .stat {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .stat dd {
+    font-size: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .words-display {
     --line: 2.5rem;
@@ -323,5 +366,78 @@
 
   .stats {
     gap: var(--space-3);
+  }
+}
+
+/* Phones in landscape and other very short, wide screens:
+   stats and Reset share one row so the word box stays in view. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .typing-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "controls controls"
+      "progress progress"
+      "words words"
+      "stats actions";
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .controls {
+    grid-area: controls;
+  }
+
+  .progress {
+    grid-area: progress;
+  }
+
+  .words-wrapper {
+    grid-area: words;
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .words-display {
+    --line: 2rem;
+    font-size: 1.1rem;
+  }
+
+  .timer-value {
+    font-size: 2rem;
+  }
+
+  /* Result is still announced to screen readers; the stat tiles show it visually. */
+  .status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .stats {
+    grid-area: stats;
+    display: flex;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    gap: var(--space-2);
+  }
+
+  .stat {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .stat dd {
+    font-size: 1.25rem;
+  }
+
+  .actions {
+    grid-area: actions;
   }
 }
