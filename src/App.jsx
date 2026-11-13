@@ -1,11 +1,11 @@
 import TypingBox from "./components/TypingBox";
-import ThemeToggle from "./components/ThemeToggle";
+import ThemeSwitcher from "./components/ThemeSwitcher";
 import { useTheme } from "./theme";
 
 const LOGO_TEXT = "Loki type";
 
 function App() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   return (
     <div className="app">
@@ -24,7 +24,7 @@ function App() {
             )}
           </span>
         </h1>
-        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+        <ThemeSwitcher theme={theme} onChange={setTheme} />
       </header>
 
       <main className="site-main">
